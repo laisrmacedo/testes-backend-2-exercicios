@@ -138,4 +138,37 @@ export class UserBusiness {
 
         return output
     }
+
+    public getById = async (id: string) => {
+        const userDB = await this.userDatabase.getById(id)
+        if(!userDB){
+            throw new BadRequestError("Este id nao esta cadastrado")
+        }
+
+            const user = new User(
+                userDB.id,
+                userDB.name,
+                userDB.email,
+                userDB.password,
+                userDB.role,
+                userDB.created_at
+            )
+
+        const output = user.toBusinessModel()
+
+        return output
+    }
+
+    public delete = async (id: string) => {
+        const userDB = await this.userDatabase.getById(id)
+        if(!userDB){
+            throw new BadRequestError("Este id nao esta cadastrado")
+        }
+
+        await this.userDatabase.delete(id)
+
+        return {
+            message: 'usuario deletado'
+        }
+    }
 }
