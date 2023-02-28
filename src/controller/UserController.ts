@@ -63,4 +63,36 @@ export class UserController {
             }
         }
     }
+
+    public getById = async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id as string
+            const output = await this.userBusiness.getById(id)
+
+            res.status(200).send(output)
+        } catch (error) {
+            console.log(error)
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
+
+    public delete = async (req: Request, res: Response) => {
+        try {
+            const id = req.params.id as string
+            await this.userBusiness.delete(id)
+
+            res.status(200).end()
+        } catch (error) {
+            console.log(error)
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
 }
